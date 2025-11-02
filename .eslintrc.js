@@ -1,23 +1,19 @@
 module.exports = {
+  root: true,
   parser: '@typescript-eslint/parser',
-  extends: [
-    'eslint:recommended',
-    '@typescript-eslint/recommended',
-  ],
-  plugins: ['@typescript-eslint'],
   parserOptions: {
-    ecmaVersion: 2020,
+    project: true,
+    tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  env: {
-    node: true,
-    es6: true,
-  },
+  plugins: ['@typescript-eslint', 'prettier'],
+  extends: ['@nestjs/eslint-config', 'plugin:prettier/recommended'],
+  ignorePatterns: ['dist', 'node_modules'],
   rules: {
-    '@typescript-eslint/no-unused-vars': 'error',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'warn',
-    'no-console': 'warn',
+    'prettier/prettier': 'error',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+    ],
   },
 };
