@@ -1,0 +1,86 @@
+// Prisma schema for the Court Booking Platform MVP (SQLite backend)
+// Defines core entities: User, Establishment, Court, Schedule, Booking.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String                 @id @default(cuid())
+  name            String
+  email           String                 @unique
+  passwordHash    String
+  role            String                 @default("PLAYER") // PLAYER or MANAGER
+  verified        Boolean                @default(false)
+  establishments  EstablishmentManager[]
+  bookings        Booking[]
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+}
+
+model Establishment {
+  id          String                @id @default(cuid())
+  name        String
+  address     String
+  latitude    Float?
+  longitude   Float?
+  courts      Court[]
+  managers    EstablishmentManager[]
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+}
+
+model Court {
+  id               String        @id @default(cuid())
+  name             String
+  type             String
+  dimensions       String?
+  hourlyPrice      Decimal
+  description      String?
+  establishment    Establishment @relation(fields: [establishmentId], references: [id], onDelete: Cascade)
+  establishmentId  String
+  schedules        Schedule[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+}
+
+model Schedule {
+  id         String         @id @default(cuid())
+  startTime  DateTime
+  endTime    DateTime
+  price      Decimal?
+  status     String         @default("AVAILABLE") // AVAILABLE or RESERVED
+  court      Court          @relation(fields: [courtId], references: [id], onDelete: Cascade)
+  courtId    String
+  booking    Booking?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+}
+
+model Booking {
+  id         String        @id @default(cuid())
+  status     String        @default("CONFIRMED") // CONFIRMED or CANCELLED
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  schedule   Schedule      @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  scheduleId String        @unique
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+}
+
+model EstablishmentManager {
+  id               String        @id @default(cuid())
+  establishment    Establishment @relation(fields: [establishmentId], references: [id], onDelete: Cascade)
+  establishmentId  String
+  manager          User          @relation(fields: [managerId], references: [id], onDelete: Cascade)
+  managerId        String
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@unique([establishmentId, managerId])
+}
