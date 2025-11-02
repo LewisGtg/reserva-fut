@@ -23,7 +23,9 @@ async function bootstrap(): Promise<void> {
   await app.listen(port);
 
   const logger = new Logger('Bootstrap');
-  logger.log(`Application running on http://localhost:${port} in ${nodeEnv} mode`);
+  logger.log(
+    `Application running on http://localhost:${port} in ${nodeEnv} mode`,
+  );
 }
 
 void bootstrap();
