@@ -43,8 +43,16 @@ export default defineConfig([
         {
           max: 50,
           skipBlankLines: true,
+          skipComments: true,
         },
       ],
+    },
+  },
+  {
+    files: ['**/*.spec.ts', '**/*.test.ts'],
+    rules: {
+      'max-lines-per-function': 'off', // Allow longer test functions
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
   {
