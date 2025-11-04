@@ -56,6 +56,6 @@ export default defineConfig([
     },
   },
   {
-    ignores: ['dist/**', 'node_modules/**', '*.js', 'coverage/**'],
+    ignores: ['dist/**', 'node_modules/**', '*.js', 'coverage/**', 'prisma/seed.ts'],
   },
 ]);

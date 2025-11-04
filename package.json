@@ -10,7 +10,15 @@
     "test:watch": "jest --watch",
     "lint": "eslint . --ext .ts",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev"
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "ts-node prisma/seed.ts",
+    "prisma:reset": "prisma migrate reset",
+    "db:seed": "ts-node prisma/seed.ts",
+    "db:reset": "prisma migrate reset --skip-seed && npm run db:seed",
+    "prisma:studio": "npx prisma studio --port 5555"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.4.20",
