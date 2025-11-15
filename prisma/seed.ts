@@ -314,10 +314,11 @@ async function seedBookings(users: any[], schedules: any[]) {
     reservedSchedules.length - bookings.length,
   );
   for (let i = 0; i < cancelledCount; i++) {
-    const scheduleForCancelled = reservedSchedules[bookings.length + i];
+    const scheduleIndex = bookings.length + i;
+    const scheduleForCancelled = reservedSchedules[scheduleIndex];
     const player = players[i % players.length];
 
-    const cancelledBooking = await prisma.booking.create({
+    await prisma.booking.create({
       data: {
         status: 'CANCELLED',
         userId: player.id,
@@ -330,8 +331,6 @@ async function seedBookings(users: any[], schedules: any[]) {
       where: { id: scheduleForCancelled.id },
       data: { status: 'AVAILABLE' },
     });
-
-    bookings.push(cancelledBooking);
   }
 
   console.log(`✅ Created ${bookings.length} bookings`);

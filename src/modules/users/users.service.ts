@@ -50,6 +50,7 @@ export class UsersService {
         id: true,
         name: true,
         email: true,
+        passwordHash: true,
         role: true,
         verified: true,
         createdAt: true,
@@ -59,6 +60,24 @@ export class UsersService {
 
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
+    return user;
+  }
+
+  async findByEmail(email: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        passwordHash: true,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${email} not found`);
     }
 
     return user;

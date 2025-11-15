@@ -23,6 +23,12 @@ async function bootstrap(): Promise<void> {
   await app.listen(port);
 
   const logger = new Logger('Bootstrap');
+
+  const secretKey = configService.get<string | undefined>('app.secretKey');
+  if (!secretKey) {
+    throw new Error('SECRET_KEY is not defined in environment variables.');
+  }
+
   logger.log(
     `Application running on http://localhost:${port} in ${nodeEnv} mode`,
   );

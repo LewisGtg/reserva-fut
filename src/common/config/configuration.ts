@@ -4,6 +4,7 @@ type AppConfig = {
   nodeEnv: string;
   port: number;
   databaseUrl: string;
+  secretKey: string | undefined;
 };
 
 /**
@@ -13,4 +14,5 @@ export default registerAs<AppConfig>('app', () => ({
   nodeEnv: process.env.NODE_ENV?.trim() || 'development',
   port: Number(process.env.PORT ?? 3000),
   databaseUrl: process.env.DATABASE_URL ?? 'file:./dev.db',
+  secretKey: process.env.SECRET_KEY,
 }));
